@@ -1,0 +1,302 @@
+<!-- Bioniq · Проверка города · v1 -->
+<!-- Создано: 08.07.2026 · Обновлено: 08.07.2026 -->
+<div id="bioniq-city-widget">
+  <style>
+    #bioniq-city-widget {
+      --bg: #F7F8F9;
+      --ink: #16241F;
+      --muted: #5C6B66;
+      --line: #E2E6E4;
+      --accent: #1E5C4A;
+      --accent-soft: #E7F0EC;
+      --yes: #1E5C4A;
+      --no: #8A6D3B;
+      --no-soft: #F4EDE0;
+      --card: #FFFFFF;
+      --radius: 18px;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--ink);
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 4px;
+      -webkit-font-smoothing: antialiased;
+    }
+    #bioniq-city-widget * { box-sizing: border-box; }
+    #bioniq-city-widget .wrap {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px 24px 26px;
+    }
+    #bioniq-city-widget .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin: 0 0 10px;
+    }
+    #bioniq-city-widget h2 {
+      font-size: 22px;
+      line-height: 1.25;
+      font-weight: 650;
+      margin: 0 0 6px;
+      letter-spacing: -0.01em;
+    }
+    #bioniq-city-widget .sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0 0 22px;
+      line-height: 1.5;
+    }
+    #bioniq-city-widget .field { position: relative; }
+    #bioniq-city-widget input {
+      width: 100%;
+      font-size: 16px;
+      padding: 15px 16px;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+      color: var(--ink);
+      background: var(--bg);
+      transition: border-color .15s, background .15s;
+      font-family: inherit;
+    }
+    #bioniq-city-widget input::placeholder { color: #9AA5A1; }
+    #bioniq-city-widget input:focus {
+      border-color: var(--accent);
+      background: #fff;
+    }
+    #bioniq-city-widget .suggest {
+      position: absolute;
+      left: 0; right: 0; top: calc(100% + 6px);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 12px 32px rgba(22,36,31,0.10);
+      max-height: 232px;
+      overflow-y: auto;
+      z-index: 20;
+      display: none;
+    }
+    #bioniq-city-widget .suggest.open { display: block; }
+    #bioniq-city-widget .suggest button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      padding: 12px 16px;
+      font-size: 15px;
+      color: var(--ink);
+      cursor: pointer;
+      font-family: inherit;
+      border-bottom: 1px solid #F1F3F2;
+    }
+    #bioniq-city-widget .suggest button:last-child { border-bottom: none; }
+    #bioniq-city-widget .suggest button:hover,
+    #bioniq-city-widget .suggest button.active { background: var(--accent-soft); }
+    #bioniq-city-widget .suggest mark {
+      background: none;
+      color: var(--accent);
+      font-weight: 650;
+    }
+    #bioniq-city-widget .check {
+      width: 100%;
+      margin-top: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity .15s, transform .05s;
+    }
+    #bioniq-city-widget .check:hover { opacity: .92; }
+    #bioniq-city-widget .check:active { transform: translateY(1px); }
+    #bioniq-city-widget .result {
+      margin-top: 18px;
+      border-radius: 14px;
+      padding: 20px;
+      display: none;
+      align-items: flex-start;
+      gap: 14px;
+      animation: pop .22s ease;
+    }
+    @keyframes pop { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    #bioniq-city-widget .result.show { display: flex; }
+    #bioniq-city-widget .result.yes { background: var(--accent-soft); }
+    #bioniq-city-widget .result.no  { background: var(--no-soft); }
+    #bioniq-city-widget .result.info { background: #EEF1F3; }
+    #bioniq-city-widget .icon {
+      flex: 0 0 auto;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #bioniq-city-widget .result.yes .icon { background: var(--yes); }
+    #bioniq-city-widget .result.no .icon  { background: var(--no); }
+    #bioniq-city-widget .result.info .icon { background: #6B7A82; }
+    #bioniq-city-widget .icon svg { width: 22px; height: 22px; stroke: #fff; }
+    #bioniq-city-widget .rtext strong {
+      display: block;
+      font-size: 17px;
+      font-weight: 650;
+      margin-bottom: 3px;
+    }
+    #bioniq-city-widget .rtext span {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    #bioniq-city-widget .foot {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #9AA5A1;
+      text-align: center;
+    }
+    @media (max-width: 420px) {
+      #bioniq-city-widget .wrap { padding: 24px 18px; }
+      #bioniq-city-widget h2 { font-size: 20px; }
+    }
+  </style>
+
+  <div class="wrap">
+    <p class="eyebrow">Чекап · сдача крови</p>
+    <h2>Проверьте, доступна ли сдача в вашем городе</h2>
+    <p class="sub">Введите название города. Мы покажем, есть ли рядом партнёрская лаборатория.</p>
+
+    <div class="field">
+      <input id="bq-input" type="text" autocomplete="off" placeholder="Например, Казань" aria-label="Город" />
+      <div id="bq-suggest" class="suggest" role="listbox"></div>
+    </div>
+
+    <button id="bq-check" class="check">Проверить</button>
+
+    <div id="bq-result" class="result" role="status" aria-live="polite">
+      <div class="icon" id="bq-icon"></div>
+      <div class="rtext">
+        <strong id="bq-title"></strong>
+        <span id="bq-desc"></span>
+      </div>
+    </div>
+
+    <p class="foot">Данные по партнёрским лабораториям. Если города нет в списке, свяжитесь с нами.</p>
+  </div>
+
+  <script>
+  (function(){
+    var CITIES = ["Алагир", "Алатырь", "Александров", "Алексеевка", "Алексин", "Алушта", "Анапа", "Ангарск", "Аргун", "Ардон", "Армавир", "Армянск", "Арсеньев", "Артём", "Архангельск", "Астрахань", "Аша", "Баксан", "Балабаново", "Балаково", "Балашиха", "Барнаул", "Бахчисарай", "Белая Калитва", "Белгород", "Белово", "Белогорск", "Бердск", "Березники", "Бийск", "Благовещенск", "Благодарный", "Богородицк", "Большой Камень", "Борисовка", "Боровичи", "Боровск", "Братск", "Брянск", "Бугуруслан", "Будённовск", "Бузулук", "Буйнакск", "Валуйки", "Великие Луки", "Великий Новгород", "Верхнеуральск", "Верхний Уфалей", "Вичуга", "Владивосток", "Владикавказ", "Владимир", "Волгоград", "Волжск", "Волжский", "Вологда", "Воронеж", "Воткинск", "Всеволожск", "Вязники", "Вязьма", "Гай", "Геленджик", "Георгиевск", "Горно-Алтайск", "Гороховец", "Грозный", "Губкин", "Гусев", "Гусь-Хрустальный", "Дагестанские Огни", "Дербент", "Десногорск", "Джанкой", "Дзержинский", "Дигора", "Долгопрудный", "Домодедово", "Дятьково", "Евпатория", "Екатеринбург", "Елец", "Еманжелинск", "Ессентуки", "Еткуль", "Железноводск", "Железногорск", "Жигулёвск", "Заринск", "Засечное", "Зеленокумск", "Златоуст", "Зубова Поляна", "Иваново", "Ижевск", "Избербаш", "Изобильный", "Ипатово", "Иркутск", "Йошкар-Ола", "Казань", "Калининград", "Калуга", "Каменск-Уральский", "Каменск-Шахтинский", "Камень-на-Оби", "Камышин", "Канаш", "Карабаш", "Карачаевск", "Карталы", "Касимов", "Касли", "Каспийск", "Касумкент", "Катав-Ивановск", "Каякент", "Кемерово", "Керчь", "Кизилюрт", "Кизляр", "Кимовск", "Кинель-Черкассы", "Кинешма", "Киржач", "Киров", "Кисловодск", "Клинцы", "Ковров", "Ковылкино", "Когалым", "Козельск", "Козьмодемьянск", "Кольчугино", "Комсомольск-на-Амуре", "Кондопога", "Копейск", "Коркино", "Королёв", "Кострома", "Котельники", "Красногорск", "Краснодар", "Краснознаменск", "Красноперекопск", "Красноярск", "Кузнецк", "Кунашак", "Курган", "Курск", "Куртамыш", "Курчатов", "Куса", "Кыштым", "Лебедянь", "Ленинск-Кузнецкий", "Лермонтов", "Лесозаводск", "Ливны", "Липецк", "Лобня", "Людиново", "Лянтор", "Магарамкент", "Магнитогорск", "Майкоп", "Майский", "Малая Вишера", "Малгобек", "Малоярославец", "Махачкала", "Мегион", "Медногорск", "Миасс", "Минеральные Воды", "Михайлов", "Михайловка", "Михайловск", "Мичуринск", "Моздок", "Моршанск", "Москва", "Мурманск", "Муром", "Мценск", "Мытищи", "Набережные Челны", "Назрань", "Нальчик", "Нарткала", "Находка", "Невинномысск", "Нерюнгри", "Нефтегорск", "Нефтекамск", "Нефтекумск", "Нефтеюганск", "Нижневартовск", "Нижнее Казанище", "Нижний Новгород", "Новоалександровск", "Новоалтайск", "Новодвинск", "Новозыбков", "Новокузнецк", "Новокуйбышевск", "Новомичуринск", "Новомосковск", "Новоорск", "Новопавловск", "Новороссийск", "Новосибирск", "Новотроицк", "Новочебоксарск", "Новочеркасск", "Новый Оскол", "Новый Уренгой", "Ноябрьск", "Нягань", "Обнинск", "Обоянь", "Одинцово", "Озёрск", "Октябрьский", "Омск", "Оренбург", "Орск", "Орёл", "Остров", "Отрадный", "Пенза", "Пермь", "Петрозаводск", "Пионерский", "Пласт", "Подольск", "Порхов", "Похвистнево", "Прокопьевск", "Прохладный", "Псков", "Пыть-Ях", "Пятигорск", "Ракитное", "Раменское", "Реутов", "Родники", "Рославль", "Ростов-на-Дону", "Рубцовск", "Рузаевка", "Рыбинск", "Рыбное", "Ряжск", "Рязань", "Саки", "Салават", "Салехард", "Самара", "Санкт-Петербург", "Саракташ", "Саранск", "Саратов", "Сасово", "Сатка", "Сафоново", "Светлоград", "Светлый", "Свободный", "Севастополь", "Северодвинск", "Североморск", "Северск", "Сергиевск", "Сердобск", "Сим", "Симферополь", "Славянск-на-Кубани", "Смоленск", "Смоленское", "Смышляевка", "Снежинск", "Собинка", "Советск", "Солнечнодольск", "Соль-Илецк", "Сорочинск", "Сочи", "Спасск-Дальний", "Ставрополь", "Старый Крым", "Старый Оскол", "Стерлитамак", "Строитель", "Ступино", "Судогда", "Сургут", "Сызрань", "Сыктывкар", "Таганрог", "Тамбов", "Тверь", "Теберда", "Тейково", "Терек", "Тимашёвск", "Товарково", "Тольятти", "Томск", "Торбеево", "Тоцкое", "Троицк", "Трёхгорный", "Туапсе", "Тула", "Тырныауз", "Тюмень", "Узловая", "Улан-Удэ", "Ульяновск", "Унеча", "Урай", "Урюпинск", "Усолье-Сибирское", "Уссурийск", "Усть-Джегута", "Усть-Илимск", "Усть-Катав", "Уфа", "Ухта", "Учкекен", "Феодосия", "Фурманов", "Хабаровск", "Ханты-Мансийск", "Хасавюрт", "Химки", "Чапаевск", "Чебаркуль", "Чебоксары", "Челябинск", "Черемхово", "Череповец", "Черкесск", "Черняховск", "Чита", "Чудово", "Шадринск", "Шахты", "Шебекино", "Шумиха", "Шуя", "Щучье", "Щёкино", "Щёлково", "Элиста", "Энгельс", "Югорск", "Южноуральск", "Юрьев-Польский", "Яблоновский", "Якутск", "Ялта", "Янино", "Ярославль", "Ярцево"];
+    var norm = function(s){ return s.toLowerCase().replace(/ё/g,'е').replace(/[^а-я\- ]/g,'').trim(); };
+    var index = CITIES.map(function(c){ return { c: c, k: norm(c) }; });
+
+    var input = document.getElementById('bq-input');
+    var box = document.getElementById('bq-suggest');
+    var btn = document.getElementById('bq-check');
+    var res = document.getElementById('bq-result');
+    var icon = document.getElementById('bq-icon');
+    var title = document.getElementById('bq-title');
+    var desc = document.getElementById('bq-desc');
+    var activeIdx = -1, current = [];
+
+    var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+    var CROSS = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+    var QUES  = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9.1 9a3 3 0 015.8 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12" y2="17"/></svg>';
+
+    function esc(s){ return s.replace(/[&<>]/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m]; }); }
+
+    function suggestions(q){
+      var nq = norm(q);
+      if(!nq) return [];
+      var starts = [], contains = [];
+      for(var i=0;i<index.length;i++){
+        var p = index[i].k.indexOf(nq);
+        if(p===0) starts.push(index[i]);
+        else if(p>0) contains.push(index[i]);
+      }
+      return starts.concat(contains).slice(0,8);
+    }
+
+    function renderSuggest(){
+      var q = input.value;
+      current = suggestions(q);
+      activeIdx = -1;
+      if(!current.length){ box.classList.remove('open'); box.innerHTML=''; return; }
+      var nq = norm(q);
+      box.innerHTML = current.map(function(item){
+        var idx = item.k.indexOf(nq);
+        var disp = item.c;
+        var html = esc(disp);
+        if(idx>=0){
+          html = esc(disp.slice(0,idx)) + '<mark>' + esc(disp.slice(idx, idx+nq.length)) + '</mark>' + esc(disp.slice(idx+nq.length));
+        }
+        return '<button type="button" data-city="'+esc(disp)+'">'+html+'</button>';
+      }).join('');
+      box.classList.add('open');
+    }
+
+    function showResult(type, t, d){
+      res.className = 'result show ' + type;
+      icon.innerHTML = type==='yes' ? CHECK : (type==='no' ? CROSS : QUES);
+      title.textContent = t;
+      desc.textContent = d;
+    }
+
+    function check(){
+      box.classList.remove('open');
+      var q = input.value.trim();
+      if(!q){ showResult('info','Введите город','Напишите название города в поле выше.'); return; }
+      var nq = norm(q);
+      var exact = index.find(function(x){ return x.k === nq; });
+      if(exact){
+        showResult('yes','Да, сдача доступна','В городе '+exact.c+' есть партнёрская лаборатория. Активируйте промокод и запишитесь на сдачу крови.');
+        input.value = exact.c;
+        return;
+      }
+      var near = suggestions(q);
+      if(near.length){
+        showResult('info','Уточните город','Возможно, вы имели в виду: '+near.slice(0,3).map(function(x){return x.c;}).join(', ')+'. Выберите город из подсказки.');
+      } else {
+        showResult('no','Пока не нашли','В этом городе партнёрская лаборатория не найдена. Проверьте написание или свяжитесь с нами.');
+      }
+    }
+
+    input.addEventListener('input', function(){ res.classList.remove('show'); renderSuggest(); });
+    input.addEventListener('keydown', function(e){
+      if(!box.classList.contains('open')){ if(e.key==='Enter') check(); return; }
+      var btns = box.querySelectorAll('button');
+      if(e.key==='ArrowDown'){ e.preventDefault(); activeIdx=Math.min(activeIdx+1,btns.length-1); }
+      else if(e.key==='ArrowUp'){ e.preventDefault(); activeIdx=Math.max(activeIdx-1,0); }
+      else if(e.key==='Enter'){
+        e.preventDefault();
+        if(activeIdx>=0 && btns[activeIdx]){ pick(btns[activeIdx].dataset.city); }
+        else check();
+        return;
+      } else if(e.key==='Escape'){ box.classList.remove('open'); return; }
+      btns.forEach(function(b,i){ b.classList.toggle('active', i===activeIdx); });
+      if(btns[activeIdx]) btns[activeIdx].scrollIntoView({block:'nearest'});
+    });
+
+    function pick(city){
+      input.value = city;
+      box.classList.remove('open');
+      check();
+    }
+
+    box.addEventListener('click', function(e){
+      var b = e.target.closest('button');
+      if(b) pick(b.dataset.city);
+    });
+
+    btn.addEventListener('click', check);
+
+    document.addEventListener('click', function(e){
+      if(!e.target.closest('#bioniq-city-widget .field')) box.classList.remove('open');
+    });
+  })();
+  </script>
+</div>
