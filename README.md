@@ -37,11 +37,11 @@
 
 ## Деплой на bioniq.ru (передать в разработку)
 
-Папка `deploy/` собрана по «Инструкции-заливки-v5» (применимая часть):
-- `marketing-city-checker-index.html` — статичная страница: Метрика 93616626, абсолютные CDN-пути к картинкам, бренд-палитра, Montserrat.
-- `marketing-city-checker-bioniq-wordmark-blue.svg` и `marketing-city-checker-bioniq-sign-black.svg` — логотип и знак (фавикон), заливать в `files-bioniq-ru/bioniq-ru/images/` рядом с index (плоские имена).
+Рабочая папка проекта — `~/Desktop/Рабочая/Vibecode лендинги Bioniq/city-checker/` (src + deploy + README, по конвенции energy/essential). Здесь в `deploy/` — зеркальная копия.
 
-Флоу: залить 3 файла из `deploy/` через FileZilla в `files-bioniq-ru/bioniq-ru/images/` → написать Кириллу роут `/marketing/city-checker` → файл `marketing-city-checker-index.html`.
+- `deploy/marketing-city-checker-index.html` — единственный файл для заливки: логотип вшит inline-SVG, фавикон — data-URI, картинок нет, Метрика 93616626, бренд-палитра, Montserrat.
+
+Флоу: залить 1 файл через FileZilla плоско в `files-bioniq-ru/bioniq-ru/images/` → написать Кириллу роут `/marketing/city-checker` → файл `marketing-city-checker-index.html`.
 
 Неприменимое из инструкции (осознанно): форма заявки с чек-боксом и маской телефона, интеграция CreateRequestForConsultation — на странице нет формы; единый футер footer-reloaded — решили не ставить, страница сервисная, футер со всеми ссылками избыточен.
 
