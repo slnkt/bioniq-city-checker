@@ -37,11 +37,11 @@
 
 ## Деплой на bioniq.ru (передать в разработку)
 
-Рабочая папка проекта — `~/Desktop/Рабочая/Vibecode лендинги Bioniq/city-checker/` (src + deploy + README, по конвенции energy/essential). Здесь в `deploy/` — зеркальная копия.
+Рабочая папка проекта — `~/Desktop/Рабочая/Vibecode лендинги Bioniq/motherhood-cities/` (src + deploy + README, по конвенции energy/essential). Здесь в `deploy/` — зеркальная копия.
 
-- `deploy/marketing-city-checker-index.html` — единственный файл для заливки: логотип вшит inline-SVG, фавикон — data-URI, картинок нет, Метрика 93616626, бренд-палитра, Montserrat.
+- `deploy/marketing-motherhood-cities-index.html` — единственный файл для заливки: логотип вшит inline-SVG, фавикон — data-URI, картинок нет, Метрика 93616626, бренд-палитра, Montserrat.
 
-Флоу: залить 1 файл через FileZilla плоско в `files-bioniq-ru/bioniq-ru/images/` → написать Кириллу роут `/marketing/city-checker` → файл `marketing-city-checker-index.html`.
+Флоу: залить 1 файл через FileZilla плоско в `files-bioniq-ru/bioniq-ru/images/` → написать Кириллу роут `/marketing/motherhood-cities` → файл `marketing-motherhood-cities-index.html`.
 
 Неприменимое из инструкции (осознанно): форма заявки с чек-боксом и маской телефона, интеграция CreateRequestForConsultation — на странице нет формы; единый футер footer-reloaded — решили не ставить, страница сервисная, футер со всеми ссылками избыточен.
 
