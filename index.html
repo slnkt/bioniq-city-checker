@@ -5,23 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#EDF8FC" />
   <title>Bioniq — проверка доступности сдачи крови в вашем городе</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <style>
     body {
       margin: 0;
       min-height: 100vh;
       background: #EDF8FC;
+      box-sizing: border-box;
+      padding: 0;
+    }
+    .page-header {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 24px 16px 8px;
+      box-sizing: border-box;
+    }
+    .page-header a { display: inline-block; line-height: 0; }
+    .page-header img { height: 26px; width: auto; display: block; }
+    .page-main {
       display: flex;
-      align-items: flex-start;
       justify-content: center;
-      padding: 32px 12px;
+      padding: 8px 12px 32px;
       box-sizing: border-box;
     }
     @media (max-width: 420px) {
-      body { padding: 12px 10px 24px; }
+      .page-header { padding: 18px 14px 6px; }
+      .page-header img { height: 22px; }
+      .page-main { padding: 6px 10px 24px; }
     }
   </style>
 </head>
 <body>
+<header class="page-header">
+  <a href="https://bioniq.ru/" target="_blank" rel="noopener" aria-label="Bioniq — на главную">
+    <img src="bioniq-logo-blue.svg" alt="Bioniq" />
+  </a>
+</header>
+<main class="page-main">
 <!-- Bioniq · Проверка города · v2 (фирменный стиль Bioniq) -->
 <!-- Создано: 08.07.2026 · Обновлено: 08.07.2026 -->
 <div id="bioniq-city-widget">
@@ -58,7 +78,7 @@
       font-size: 22px;
       line-height: 1.25;
       font-weight: 600;
-      color: var(--accent);
+      color: var(--ink);
       margin: 0 0 20px;
       letter-spacing: -0.01em;
     }
@@ -111,7 +131,7 @@
     #bioniq-city-widget .suggest button.active { background: var(--accent-soft); }
     #bioniq-city-widget .suggest mark {
       background: none;
-      color: var(--accent);
+      color: var(--ink);
       font-weight: 600;
     }
     #bioniq-city-widget .check {
@@ -320,5 +340,6 @@
   </script>
 </div>
 
+</main>
 </body>
 </html>
