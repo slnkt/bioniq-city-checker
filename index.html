@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bioniq — проверка доступности сдачи крови в вашем городе</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #EDF8FC;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 32px 12px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+<!-- Bioniq · Проверка города · v2 (фирменный стиль Bioniq) -->
+<!-- Создано: 08.07.2026 · Обновлено: 08.07.2026 -->
+<div id="bioniq-city-widget">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+    #bioniq-city-widget {
+      --bg: #EDF8FC;
+      --ink: #05131A;
+      --muted: rgba(5, 19, 26, 0.6);
+      --line: #D5EAF4;
+      --accent: #1098D4;
+      --accent-light: #63BCE3;
+      --accent-soft: #EDF8FC;
+      --error: #d10714;
+      --error-soft: #FDEDEE;
+      --card: #FFFFFF;
+      --radius: 18px;
+      box-sizing: border-box;
+      font-family: "Montserrat", Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 4px;
+      -webkit-font-smoothing: antialiased;
+    }
+    #bioniq-city-widget * { box-sizing: border-box; }
+    #bioniq-city-widget .wrap {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px 24px 26px;
+    }
+    #bioniq-city-widget h2 {
+      font-size: 22px;
+      line-height: 1.25;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 0 0 20px;
+      letter-spacing: -0.01em;
+    }
+    #bioniq-city-widget .field { position: relative; }
+    #bioniq-city-widget input {
+      width: 100%;
+      font-size: 16px;
+      padding: 15px 16px;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+      color: var(--ink);
+      background: var(--bg);
+      transition: border-color .15s, background .15s;
+      font-family: inherit;
+    }
+    #bioniq-city-widget input::placeholder { color: rgba(5, 19, 26, 0.35); }
+    #bioniq-city-widget input:focus {
+      border-color: var(--accent);
+      background: #fff;
+    }
+    #bioniq-city-widget .suggest {
+      position: absolute;
+      left: 0; right: 0; top: calc(100% + 6px);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 12px 32px rgba(16, 152, 212, 0.14);
+      max-height: 232px;
+      overflow-y: auto;
+      z-index: 20;
+      display: none;
+    }
+    #bioniq-city-widget .suggest.open { display: block; }
+    #bioniq-city-widget .suggest button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      padding: 12px 16px;
+      font-size: 15px;
+      color: var(--ink);
+      cursor: pointer;
+      font-family: inherit;
+      border-bottom: 1px solid #EDF8FC;
+    }
+    #bioniq-city-widget .suggest button:last-child { border-bottom: none; }
+    #bioniq-city-widget .suggest button:hover,
+    #bioniq-city-widget .suggest button.active { background: var(--accent-soft); }
+    #bioniq-city-widget .suggest mark {
+      background: none;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    #bioniq-city-widget .check {
+      width: 100%;
+      margin-top: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #1098D4 0%, #63BCE3 100%);
+      color: #fff;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity .15s, transform .05s;
+    }
+    #bioniq-city-widget .check:hover { opacity: .92; }
+    #bioniq-city-widget .check:active { transform: translateY(1px); }
+    #bioniq-city-widget .result {
+      margin-top: 18px;
+      border-radius: 14px;
+      padding: 20px;
+      display: none;
+      align-items: flex-start;
+      gap: 14px;
+      animation: pop .22s ease;
+    }
+    @keyframes pop { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    #bioniq-city-widget .result.show { display: flex; }
+    #bioniq-city-widget .result.yes { background: var(--accent-soft); }
+    #bioniq-city-widget .result.no  { background: var(--error-soft); }
+    #bioniq-city-widget .result.info { background: var(--accent-soft); }
+    #bioniq-city-widget .icon {
+      flex: 0 0 auto;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #bioniq-city-widget .result.yes .icon { background: var(--accent); }
+    #bioniq-city-widget .result.no .icon  { background: var(--error); }
+    #bioniq-city-widget .result.info .icon { background: var(--accent-light); }
+    #bioniq-city-widget .icon svg { width: 22px; height: 22px; stroke: #fff; }
+    #bioniq-city-widget .rtext strong {
+      display: block;
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    #bioniq-city-widget .rtext span {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    #bioniq-city-widget .foot {
+      margin-top: 16px;
+      font-size: 12px;
+      color: rgba(5, 19, 26, 0.4);
+      text-align: center;
+    }
+    @media (max-width: 420px) {
+      #bioniq-city-widget .wrap { padding: 24px 18px; }
+      #bioniq-city-widget h2 { font-size: 20px; }
+    }
+  </style>
+
+  <div class="wrap">
+    <h2>Проверьте доступность сдачи крови в вашем городе</h2>
+
+    <div class="field">
+      <input id="bq-input" type="text" autocomplete="off" placeholder="Например, Казань" aria-label="Город" />
+      <div id="bq-suggest" class="suggest" role="listbox"></div>
+    </div>
+
+    <button id="bq-check" class="check">Проверить</button>
+
+    <div id="bq-result" class="result" role="status" aria-live="polite">
+      <div class="icon" id="bq-icon"></div>
+      <div class="rtext">
+        <strong id="bq-title"></strong>
+        <span id="bq-desc"></span>
+      </div>
+    </div>
+
+    <p class="foot">Если города нет в списке, свяжитесь с нами.</p>
+  </div>
+
+  <script>
+  (function(){
+    var DATA = {"Алагир":"Инвитро","Алатырь":"Инвитро","Александров":"Инвитро","Алексеевка":"Инвитро","Алексин":"Инвитро","Алушта":"Инвитро, Хеликс","Анапа":"КДЛ","Ангарск":"Инвитро","Аргун":"Инвитро","Ардон":"Хеликс","Армавир":"КДЛ","Армянск":"Инвитро","Арсеньев":"Инвитро","Артём":"Инвитро","Архангельск":"Инвитро, Хеликс","Астрахань":"КДЛ","Аша":"Инвитро","Баксан":"Инвитро, Хеликс","Балабаново":"Инвитро","Балаково":"КДЛ","Балашиха":"КДЛ","Барнаул":"Инвитро, КДЛ, Хеликс","Бахчисарай":"Инвитро, Хеликс","Белая Калитва":"КДЛ","Белгород":"Инвитро","Белово":"КДЛ","Белогорск":"Инвитро, Хеликс","Бердск":"КДЛ","Березники":"КДЛ","Бийск":"Инвитро, Хеликс","Благовещенск":"Инвитро","Благодарный":"Инвитро, Хеликс","Богородицк":"Инвитро","Большой Камень":"Инвитро","Борисовка":"Инвитро","Боровичи":"Инвитро, Хеликс","Боровск":"Инвитро","Братск":"Инвитро","Брянск":"Инвитро","Бугуруслан":"Инвитро","Будённовск":"Инвитро, Хеликс","Бузулук":"Инвитро","Буйнакск":"Инвитро, Хеликс","Валуйки":"Инвитро","Великие Луки":"Инвитро, Хеликс","Великий Новгород":"Инвитро, Хеликс","Верхнеуральск":"Инвитро","Верхний Уфалей":"Инвитро","Вичуга":"Инвитро","Владивосток":"Инвитро","Владикавказ":"Инвитро, Хеликс","Владимир":"Инвитро, Хеликс","Волгоград":"Инвитро, КДЛ","Волжск":"Инвитро","Волжский":"Инвитро, КДЛ","Вологда":"Хеликс","Воронеж":"КДЛ","Воткинск":"Инвитро","Всеволожск":"КДЛ","Вязники":"Инвитро","Вязьма":"Инвитро","Гай":"Инвитро","Геленджик":"КДЛ","Георгиевск":"Инвитро","Горно-Алтайск":"Инвитро","Гороховец":"Инвитро","Грозный":"Инвитро, Хеликс","Губкин":"Инвитро","Гусев":"Инвитро","Гусь-Хрустальный":"Инвитро","Дагестанские Огни":"Хеликс","Дербент":"Инвитро, Хеликс","Десногорск":"Инвитро","Джанкой":"Инвитро, Хеликс","Дзержинский":"КДЛ","Дигора":"Хеликс","Долгопрудный":"КДЛ","Домодедово":"КДЛ","Дятьково":"Инвитро","Евпатория":"Инвитро, Хеликс","Екатеринбург":"КДЛ","Елец":"Инвитро","Еманжелинск":"Инвитро","Ессентуки":"Инвитро, Хеликс","Еткуль":"Инвитро","Железноводск":"Инвитро","Железногорск":"Инвитро, КДЛ, Хеликс","Жигулёвск":"Инвитро","Заринск":"Инвитро","Засечное":"Хеликс","Зеленокумск":"Инвитро","Златоуст":"Инвитро","Зубова Поляна":"Инвитро","Иваново":"Инвитро, Хеликс","Ижевск":"Инвитро","Избербаш":"Инвитро","Изобильный":"Инвитро","Ипатово":"Инвитро","Иркутск":"Инвитро, Хеликс","Йошкар-Ола":"Инвитро","Казань":"КДЛ","Калининград":"Инвитро, Хеликс","Калуга":"Инвитро, Хеликс","Каменск-Уральский":"КДЛ","Каменск-Шахтинский":"КДЛ","Камень-на-Оби":"Инвитро","Камышин":"Инвитро","Канаш":"Хеликс","Карабаш":"Инвитро","Карачаевск":"Инвитро, Хеликс","Карталы":"Инвитро","Касимов":"Инвитро","Касли":"Инвитро","Каспийск":"Инвитро","Касумкент":"Хеликс","Катав-Ивановск":"Инвитро","Каякент":"Хеликс","Кемерово":"КДЛ","Керчь":"Инвитро, Хеликс","Кизилюрт":"Инвитро, Хеликс","Кизляр":"Инвитро","Кимовск":"Инвитро","Кинель-Черкассы":"Инвитро","Кинешма":"Инвитро","Киржач":"Инвитро","Киров":"Инвитро","Кисловодск":"Инвитро, Хеликс","Клинцы":"Инвитро","Ковров":"Инвитро","Ковылкино":"Инвитро","Когалым":"Инвитро","Козельск":"Инвитро","Козьмодемьянск":"Хеликс","Кольчугино":"Инвитро","Комсомольск-на-Амуре":"Инвитро","Кондопога":"Инвитро","Копейск":"Инвитро","Коркино":"Инвитро","Королёв":"КДЛ","Кострома":"Инвитро","Котельники":"КДЛ","Красногорск":"КДЛ","Краснодар":"КДЛ","Краснознаменск":"КДЛ","Красноперекопск":"Инвитро","Красноярск":"КДЛ","Кузнецк":"Инвитро","Кунашак":"Инвитро","Курган":"Инвитро","Курск":"Инвитро, Хеликс","Куртамыш":"Инвитро","Курчатов":"Инвитро","Куса":"Инвитро","Кыштым":"Инвитро, Хеликс","Лебедянь":"Инвитро","Ленинск-Кузнецкий":"КДЛ","Лермонтов":"Инвитро","Лесозаводск":"Инвитро","Ливны":"Инвитро, Хеликс","Липецк":"Инвитро","Лобня":"КДЛ","Людиново":"Инвитро, Хеликс","Лянтор":"Инвитро","Магарамкент":"Хеликс","Магнитогорск":"Инвитро","Майкоп":"Инвитро, КДЛ","Майский":"Инвитро, Хеликс","Малая Вишера":"Хеликс","Малгобек":"Инвитро","Малоярославец":"Инвитро","Махачкала":"Инвитро, Хеликс","Мегион":"Инвитро, Хеликс","Медногорск":"Инвитро","Миасс":"Инвитро","Минеральные Воды":"Инвитро, Хеликс","Михайлов":"Инвитро, Хеликс","Михайловка":"Инвитро","Михайловск":"Хеликс","Мичуринск":"Инвитро","Моздок":"Инвитро","Моршанск":"Инвитро","Москва":"КДЛ, Медси","Мурманск":"Инвитро, Хеликс","Муром":"Инвитро","Мценск":"Инвитро","Мытищи":"КДЛ","Набережные Челны":"КДЛ","Назрань":"Инвитро","Нальчик":"Инвитро, Хеликс","Нарткала":"Инвитро, Хеликс","Находка":"Инвитро","Невинномысск":"Инвитро, Хеликс","Нерюнгри":"Инвитро","Нефтегорск":"Инвитро","Нефтекамск":"КДЛ","Нефтекумск":"Инвитро, Хеликс","Нефтеюганск":"Инвитро, Хеликс","Нижневартовск":"Инвитро, КДЛ, Хеликс","Нижнее Казанище":"Хеликс","Нижний Новгород":"КДЛ","Новоалександровск":"Инвитро","Новоалтайск":"Инвитро","Новодвинск":"Инвитро","Новозыбков":"Инвитро","Новокузнецк":"КДЛ","Новокуйбышевск":"Инвитро","Новомичуринск":"Инвитро","Новомосковск":"Инвитро","Новоорск":"Инвитро","Новопавловск":"Инвитро","Новороссийск":"КДЛ","Новосибирск":"КДЛ","Новотроицк":"Инвитро","Новочебоксарск":"Хеликс","Новочеркасск":"КДЛ","Новый Оскол":"Инвитро","Новый Уренгой":"Инвитро","Ноябрьск":"Инвитро","Нягань":"Инвитро","Обнинск":"Инвитро, Хеликс","Обоянь":"Инвитро","Одинцово":"КДЛ","Озёрск":"Инвитро, Хеликс","Октябрьский":"КДЛ","Омск":"КДЛ","Оренбург":"Инвитро, Хеликс","Орск":"Инвитро, Хеликс","Орёл":"Инвитро, Хеликс","Остров":"Хеликс","Отрадный":"Инвитро","Пенза":"Инвитро, КДЛ, Хеликс","Пермь":"КДЛ","Петрозаводск":"Инвитро, Хеликс","Пионерский":"Хеликс","Пласт":"Инвитро","Подольск":"КДЛ","Порхов":"Хеликс","Похвистнево":"Инвитро","Прокопьевск":"КДЛ","Прохладный":"Инвитро, Хеликс","Псков":"Инвитро, Хеликс","Пыть-Ях":"Инвитро","Пятигорск":"Инвитро","Ракитное":"Инвитро","Раменское":"КДЛ","Реутов":"КДЛ","Родники":"Инвитро","Рославль":"Инвитро","Ростов-на-Дону":"КДЛ","Рубцовск":"Инвитро","Рузаевка":"Инвитро","Рыбинск":"КДЛ","Рыбное":"Инвитро","Ряжск":"Инвитро","Рязань":"Инвитро, Хеликс","Саки":"Инвитро, Хеликс","Салават":"КДЛ","Салехард":"Инвитро","Самара":"Инвитро","Санкт-Петербург":"КДЛ, Медси, Хромолаб","Саракташ":"Инвитро","Саранск":"Инвитро, Хеликс","Саратов":"КДЛ","Сасово":"Инвитро","Сатка":"Инвитро","Сафоново":"Инвитро, Хеликс","Светлоград":"Инвитро, Хеликс","Светлый":"Инвитро","Свободный":"Инвитро","Севастополь":"Инвитро, Хеликс","Северодвинск":"Инвитро","Североморск":"Инвитро, Хеликс","Северск":"Инвитро","Сергиевск":"Инвитро","Сердобск":"Хеликс","Сим":"Инвитро","Симферополь":"Инвитро, Хеликс","Славянск-на-Кубани":"КДЛ","Смоленск":"Инвитро, Хеликс","Смоленское":"Инвитро","Смышляевка":"Инвитро","Снежинск":"Инвитро, Хеликс","Собинка":"Инвитро","Советск":"Инвитро","Солнечнодольск":"Инвитро","Соль-Илецк":"Инвитро","Сорочинск":"Инвитро","Сочи":"КДЛ","Спасск-Дальний":"Инвитро","Ставрополь":"Инвитро, КДЛ, Хеликс","Старый Крым":"Хеликс","Старый Оскол":"Инвитро","Стерлитамак":"КДЛ","Строитель":"Инвитро","Ступино":"Медси","Судогда":"Инвитро","Сургут":"Инвитро, КДЛ, Хеликс","Сызрань":"Инвитро","Сыктывкар":"Инвитро, Хеликс","Таганрог":"КДЛ","Тамбов":"Инвитро","Тверь":"КДЛ","Теберда":"Хеликс","Тейково":"Инвитро","Терек":"Инвитро, Хеликс","Тимашёвск":"КДЛ","Товарково":"Хеликс","Тольятти":"Инвитро, Хеликс","Томск":"Инвитро","Торбеево":"Инвитро","Тоцкое":"Инвитро","Троицк":"Инвитро","Трёхгорный":"Инвитро","Туапсе":"КДЛ","Тула":"Инвитро","Тырныауз":"Инвитро, Хеликс","Тюмень":"КДЛ","Узловая":"Инвитро","Улан-Удэ":"Инвитро","Ульяновск":"Инвитро, Хеликс","Унеча":"Хеликс","Урай":"Инвитро","Урюпинск":"Инвитро","Усолье-Сибирское":"Инвитро","Уссурийск":"Инвитро","Усть-Джегута":"Инвитро, Хеликс","Усть-Илимск":"Инвитро","Усть-Катав":"Инвитро","Уфа":"КДЛ","Ухта":"Инвитро, Хеликс","Учкекен":"Хеликс","Феодосия":"Инвитро, Хеликс","Фурманов":"Инвитро","Хабаровск":"Инвитро, Хеликс","Ханты-Мансийск":"Инвитро","Хасавюрт":"Инвитро","Химки":"КДЛ","Чапаевск":"Инвитро","Чебаркуль":"Инвитро","Чебоксары":"Инвитро, Хеликс","Челябинск":"Инвитро, Хеликс","Черемхово":"Инвитро","Череповец":"Хеликс","Черкесск":"Инвитро, КДЛ, Хеликс","Черняховск":"Инвитро, Хеликс","Чита":"Инвитро","Чудово":"Хеликс","Шадринск":"Инвитро","Шахты":"КДЛ","Шебекино":"Инвитро","Шумиха":"Инвитро","Шуя":"Инвитро","Щучье":"Инвитро","Щёкино":"Инвитро","Щёлково":"КДЛ","Элиста":"Инвитро","Энгельс":"КДЛ","Югорск":"Инвитро","Южноуральск":"Инвитро","Юрьев-Польский":"Инвитро","Яблоновский":"Инвитро, Хеликс","Якутск":"Инвитро","Ялта":"Инвитро, Хеликс","Янино":"КДЛ","Ярославль":"КДЛ","Ярцево":"Инвитро, Хеликс"};
+    var norm = function(s){ return s.toLowerCase().replace(/ё/g,'е').replace(/[^а-я\- ]/g,'').trim(); };
+    var index = Object.keys(DATA).map(function(c){ return { c: c, k: norm(c), labs: DATA[c] }; });
+
+    var input = document.getElementById('bq-input');
+    var box = document.getElementById('bq-suggest');
+    var btn = document.getElementById('bq-check');
+    var res = document.getElementById('bq-result');
+    var icon = document.getElementById('bq-icon');
+    var title = document.getElementById('bq-title');
+    var desc = document.getElementById('bq-desc');
+    var activeIdx = -1, current = [];
+
+    var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+    var CROSS = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+    var QUES  = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9.1 9a3 3 0 015.8 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12" y2="17"/></svg>';
+
+    function esc(s){ return s.replace(/[&<>]/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m]; }); }
+
+    function suggestions(q){
+      var nq = norm(q);
+      if(!nq) return [];
+      var starts = [], contains = [];
+      for(var i=0;i<index.length;i++){
+        var p = index[i].k.indexOf(nq);
+        if(p===0) starts.push(index[i]);
+        else if(p>0) contains.push(index[i]);
+      }
+      return starts.concat(contains).slice(0,8);
+    }
+
+    function renderSuggest(){
+      var q = input.value;
+      current = suggestions(q);
+      activeIdx = -1;
+      if(!current.length){ box.classList.remove('open'); box.innerHTML=''; return; }
+      var nq = norm(q);
+      box.innerHTML = current.map(function(item){
+        var idx = item.k.indexOf(nq);
+        var disp = item.c;
+        var html = esc(disp);
+        if(idx>=0){
+          html = esc(disp.slice(0,idx)) + '<mark>' + esc(disp.slice(idx, idx+nq.length)) + '</mark>' + esc(disp.slice(idx+nq.length));
+        }
+        return '<button type="button" data-city="'+esc(disp)+'">'+html+'</button>';
+      }).join('');
+      box.classList.add('open');
+    }
+
+    function showResult(type, t, d){
+      res.className = 'result show ' + type;
+      icon.innerHTML = type==='yes' ? CHECK : (type==='no' ? CROSS : QUES);
+      title.textContent = t;
+      desc.textContent = d;
+    }
+
+    function check(){
+      box.classList.remove('open');
+      var q = input.value.trim();
+      if(!q){ showResult('info','Введите город','Напишите название города в поле выше.'); return; }
+      var nq = norm(q);
+      var exact = index.find(function(x){ return x.k === nq; });
+      if(exact){
+        showResult('yes','Да, лаборатория есть','В городе '+exact.c+' можно сдать анализы: '+exact.labs+'.');
+        input.value = exact.c;
+        return;
+      }
+      var near = suggestions(q);
+      if(near.length){
+        showResult('info','Уточните город','Возможно, вы имели в виду: '+near.slice(0,3).map(function(x){return x.c;}).join(', ')+'. Выберите город из подсказки.');
+      } else {
+        showResult('no','Пока не нашли','В этом городе партнёрская лаборатория не найдена. Проверьте написание или свяжитесь с нами.');
+      }
+    }
+
+    input.addEventListener('input', function(){ res.classList.remove('show'); renderSuggest(); });
+    input.addEventListener('keydown', function(e){
+      if(!box.classList.contains('open')){ if(e.key==='Enter') check(); return; }
+      var btns = box.querySelectorAll('button');
+      if(e.key==='ArrowDown'){ e.preventDefault(); activeIdx=Math.min(activeIdx+1,btns.length-1); }
+      else if(e.key==='ArrowUp'){ e.preventDefault(); activeIdx=Math.max(activeIdx-1,0); }
+      else if(e.key==='Enter'){
+        e.preventDefault();
+        if(activeIdx>=0 && btns[activeIdx]){ pick(btns[activeIdx].dataset.city); }
+        else check();
+        return;
+      } else if(e.key==='Escape'){ box.classList.remove('open'); return; }
+      btns.forEach(function(b,i){ b.classList.toggle('active', i===activeIdx); });
+      if(btns[activeIdx]) btns[activeIdx].scrollIntoView({block:'nearest'});
+    });
+
+    function pick(city){
+      input.value = city;
+      box.classList.remove('open');
+      check();
+    }
+
+    box.addEventListener('click', function(e){
+      var b = e.target.closest('button');
+      if(b) pick(b.dataset.city);
+    });
+
+    btn.addEventListener('click', check);
+
+    document.addEventListener('click', function(e){
+      if(!e.target.closest('#bioniq-city-widget .field')) box.classList.remove('open');
+    });
+  })();
+  </script>
+</div>
+
+</body>
+</html>
